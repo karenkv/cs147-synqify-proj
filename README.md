@@ -1,4 +1,4 @@
-# CS 147 Synqify IOT Project
+# CS 147 Synqify IoT Project
 Synqify is a IOT application created by Harrison Huang, Kayla Tran, and Karen Vu for the Fall 2020 course offering of 
 CS 147 at UC Irvine. This application allows user to connect speakers via Raspberry Pis to play music through Spotify
 synchronously. 
