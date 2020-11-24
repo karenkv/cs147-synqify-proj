@@ -2,17 +2,14 @@
   "name": "cs147-synqify-proj",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.0"
+    "react-scripts": "4.0.0",
+    "request": "^2.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "cd src/api && node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -34,5 +31,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^5.2.0"
   }
 }
