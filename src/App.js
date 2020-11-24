@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
-import './App.css';
+import Cookies from "universal-cookie";
 import {authEndpoint, clientId, redirectUri, scopes} from "./config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
+import './App.css';
+
+
+const cookies = new Cookies();
+
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: null,
+            token: cookies.get('token'),
             playing: false,
             results: []
         }
@@ -25,6 +30,10 @@ class App extends Component {
             this.setState({
                 token: result['access_token']
             });
+            let d = new Date();
+            d.setTime(d.getTime() + result['expires_in']);
+            cookies.set('token', result['access_token'], {path: '/', expires: d});
+            window.open(redirectUri, "_self");
         }
     }
 
@@ -58,11 +67,8 @@ class App extends Component {
                     })
                 })
             } else {
-                this.setState({
-                    results: [<p>No results found.</p>]
-                })
+                this.setState({results: [<p>No results found.</p>]})
             }
-
         }).catch(err => {
             console.log(err);
         })
