@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Cookies from "universal-cookie";
-import {authEndpoint, clientId, redirectUri, scopes} from "./utils/config";
+import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes} from "./utils/config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
@@ -49,7 +49,7 @@ class App extends Component {
 
     handleSearch = (event) => {
         event.preventDefault();
-        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(event.target.search.value)}&type=track`, {
+        fetch(`${apiEndpoint}/search?q=${encodeURIComponent(event.target.search.value)}&type=track`, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
@@ -88,7 +88,7 @@ class App extends Component {
 
     handlePlaySong = (trackUri) => {
         this.setState({currentTrack: trackUri});
-        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
+        fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
