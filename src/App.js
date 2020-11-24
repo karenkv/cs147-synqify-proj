@@ -89,8 +89,8 @@ class App extends Component {
 
     render() {
         return (
-           <div className={"App"}>
-               <div className={"header"}>
+           <div className={"App " + (!this.state.token ? 'login':'')}>
+               <div className={"header "+ (!this.state.token ? 'login-header':'')}>
                   <img src={logo} alt={"logo"}/>
                    {this.state.token && (
                        <>
@@ -106,7 +106,7 @@ class App extends Component {
                        </>
                    )}
                </div>
-               <div className={"body"}>
+               <div className={"body " + (!this.state.token ? 'login-body':'')}>
                    {!this.state.token && <button onClick={this.handleLogin}>Login to Spotify</button>}
                    {this.state.token && (
                        <>
@@ -115,7 +115,7 @@ class App extends Component {
                                 <button>View Connected Speakers</button>
                            </div>
                        </>
-                       )}
+                   )}
                </div>
            </div>
         );

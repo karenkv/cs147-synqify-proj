@@ -15,6 +15,10 @@
     overflow: hidden;
 }
 
+.login {
+    flex-direction: column;
+}
+
 .header {
     padding-top: 25px;
     padding-left: 25px;
@@ -26,12 +30,16 @@
     width: 200px;
 }
 
+.login-header {
+    height: 5vh;
+}
+
 .body {
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 75vw;
-    height: 100vh;
+    height: 75vh;
 }
 
 .body button {
@@ -48,6 +56,10 @@
 .body button:hover {
     cursor: pointer;
     background-color: var(--dark-blue);
+}
+
+.login-body{
+    width: 100vw;
 }
 
 .search {
