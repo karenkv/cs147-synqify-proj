@@ -13,11 +13,6 @@ Yarn 1.22.- or higher
 https://classic.yarnpkg.com/en/docs/install
 ```
 
-Running on: Python 3.8
-```
-https://www.python.org/downloads/release/python-380/
-```
-
 ## Dependencies
 
 Use the package manager [yarn](https://yarnpkg.com/) to install:
@@ -26,7 +21,7 @@ Use the package manager [yarn](https://yarnpkg.com/) to install:
 yarn install
 ```
 
-Installs `node_modules` and `pipenv` dependencies for development.<br />
+Installs `node_modules` dependencies for development.<br />
 
 ## Available Scripts
 
@@ -38,18 +33,3 @@ This will start the front-end and load it on your preferred browser
 link: [http://localhost:3000](http://localhost:3000)
 
 Recommended browser: Google Chrome
-
-### `yarn start-api`
-
-This will start the back-end
-(you should get something like this):
-```yarn run v1.22.4
-$ cd src/api && pipenv run flask run
- * Serving Flask app "app.py" (lazy loading)
- * Environment: development
- * Debug mode: on
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 211-628-180
-```
