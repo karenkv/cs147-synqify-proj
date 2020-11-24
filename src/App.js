@@ -71,6 +71,8 @@ class App extends Component {
             }
         }).catch(err => {
             console.log(err);
+            cookies.remove('token');
+            this.handleLogin();
         })
     }
 
