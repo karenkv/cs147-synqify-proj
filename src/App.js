@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Cookies from "universal-cookie";
-import {authEndpoint, clientId, redirectUri, scopes} from "./config";
+import {authEndpoint, clientId, redirectUri, scopes} from "./utils/config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
