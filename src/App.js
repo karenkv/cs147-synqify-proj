@@ -4,6 +4,7 @@ import {authEndpoint, clientId, redirectUri, scopes} from "./config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
+import Player from "./components/Player";
 
 
 const cookies = new Cookies();
@@ -110,10 +111,11 @@ class App extends Component {
                    {!this.state.token && <button onClick={this.handleLogin}>Login to Spotify</button>}
                    {this.state.token && (
                        <>
-                           <div>
+                           <div className={"speakers"}>
                                 <button>Connect a New Speaker</button>
                                 <button>View Connected Speakers</button>
                            </div>
+                           <Player/>
                        </>
                    )}
                </div>
