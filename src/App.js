@@ -11,6 +11,20 @@ class App extends Component {
         }
     }
 
+    componentDidMount() {
+        const result = {};
+        window.location.hash
+            .substr(1).split('&').forEach(function(part) {
+                const item = part.split('=');
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+        if (result['access_token'] !== undefined) {
+            this.setState({
+                token: result['access_token']
+            });
+        }
+    }
+
     handleLogin = () => {
         const toString = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
             "%20")}&response_type=token&show_dialog=true`
@@ -24,7 +38,7 @@ class App extends Component {
                   <img src={logo} alt={"logo"}/>
                </div>
                <div className={"body"}>
-                   {!this.state && <button onClick={this.handleLogin}>Login to Spotify</button>}
+                   {!this.state.token && <button onClick={this.handleLogin}>Login to Spotify</button>}
                </div>
            </div>
         );
