@@ -47,15 +47,22 @@ class App extends Component {
             }
         }).then(response => response.json()).then(data => {
             console.log(data);
-            this.setState({
-                results: data.tracks.items.map(track => {
-                    return <p>{track.name} by {
-                       track.artists.map(artist => {
-                           return artist.name
-                       }).join(",")
-                    }</p>
+            if(data.tracks.items.length > 0) {
+                this.setState({
+                    results: data.tracks.items.map(track => {
+                        return <p>{track.name} by {
+                           track.artists.map(artist => {
+                               return artist.name
+                           }).join(", ")
+                        }</p>
+                    })
                 })
-            })
+            } else {
+                this.setState({
+                    results: [<p>No results found.</p>]
+                })
+            }
+
         }).catch(err => {
             console.log(err);
         })
