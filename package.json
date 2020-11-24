@@ -2,16 +2,17 @@
   "name": "cs147-synqify-proj",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:8080",
   "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "cd src/api && pipenv run flask run",
-    "install": "cd src/api && pipenv install --dev && cd ../..",
+    "start-api": "cd src/api && node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

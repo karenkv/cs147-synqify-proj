@@ -1,11 +1,8 @@
 #dependencies
 /node_modules
 
-# python
-__pycache__/
-venv
-
 # misc
 .vscode/
 .idea
 .DS_Store
+.env
