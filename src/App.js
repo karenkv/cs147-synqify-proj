@@ -59,11 +59,17 @@ class App extends Component {
             if(data.tracks.items.length > 0) {
                 this.setState({
                     results: data.tracks.items.map(track => {
-                        return <p>{track.name} by {
-                           track.artists.map(artist => {
-                               return artist.name
-                           }).join(", ")
-                        }</p>
+                        return (
+                            <div className={"result"}>
+                                <button onClick={() => this.handlePlaySong(track.uri)}>►</button>
+                                <p>
+                                    {track.name} by {
+                                    track.artists.map(artist => {
+                                        return artist.name
+                                    }).join(", ")
+                                }</p>
+                            </div>
+                        )
                     })
                 })
             } else {
@@ -72,8 +78,13 @@ class App extends Component {
         }).catch(err => {
             console.log(err);
             cookies.remove('token');
+            alert("Access token expired! Please login again.");
             this.handleLogin();
         })
+    }
+
+    handlePlaySong = (trackUri) => {
+        console.log(trackUri);
     }
 
     render() {
@@ -89,7 +100,9 @@ class App extends Component {
                                    <input type="text" name="search" placeholder="Search"/>
                                </form>
                            </div>
-                           {this.state.results}
+                           <div className={"results"}>
+                               {this.state.results}
+                           </div>
                        </>
                    )}
                </div>
