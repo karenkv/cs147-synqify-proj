@@ -16,8 +16,10 @@ class App extends Component {
         this.state = {
             token: cookies.get('token'),
             playing: false,
-            results: []
+            results: [],
+            currentTrack: null
         }
+        this.handlePlaySong = this.handlePlaySong.bind(this);
     }
 
     componentDidMount() {
@@ -85,7 +87,7 @@ class App extends Component {
     }
 
     handlePlaySong = (trackUri) => {
-        console.log(trackUri);
+        this.setState({currentTrack: trackUri});
     }
 
     render() {
@@ -115,7 +117,7 @@ class App extends Component {
                                 <button>Connect a New Speaker</button>
                                 <button>View Connected Speakers</button>
                            </div>
-                           <Player/>
+                           <Player token={this.state.token} uri={this.state.currentTrack}/>
                        </>
                    )}
                </div>
