@@ -4,7 +4,6 @@ import {authEndpoint, clientId, redirectUri, scopes} from "./utils/config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
-import Player from "./components/Player";
 
 
 const cookies = new Cookies();
@@ -17,8 +16,10 @@ class App extends Component {
             token: cookies.get('token'),
             playing: false,
             results: [],
-            currentTrack: null
+            currentTrack: null,
+            deviceId: null
         }
+        this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.handlePlaySong = this.handlePlaySong.bind(this);
     }
 
@@ -54,8 +55,7 @@ class App extends Component {
             cache: 'no-cache',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.state.token}`,
-
+                'Authorization': `Bearer ${this.state.token}`
             }
         }).then(response => response.json()).then(data => {
             console.log(data);
@@ -88,6 +88,49 @@ class App extends Component {
 
     handlePlaySong = (trackUri) => {
         this.setState({currentTrack: trackUri});
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.state.deviceId}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.state.token}`,
+            },
+            body: JSON.stringify({
+                "uris": [trackUri]
+            })
+        }).then(response => response.json()).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    checkForPlayer = () => {
+        if (window.Spotify !== null) {
+            clearInterval(this.playerCheckInterval);
+            this.player = new window.Spotify.Player({
+                name: "Synqify",
+                getOAuthToken: cb => {
+                    cb(this.state.token);
+                },
+            });
+            this.player.connect();
+        }
+        this.createEventHandlers();
+    }
+
+    createEventHandlers = () => {
+        this.player.on('initialization_error', e => { console.error(e); });
+        this.player.on('authentication_error', e => {
+            console.error(e);
+            this.setState({ loggedIn: false });
+        });
+        this.player.on('account_error', e => { console.error(e); });
+        this.player.on('playback_error', e => { console.error(e); });
+        this.player.on('player_state_changed', state => { console.log(state); });
+        this.player.on('ready', data => {
+            let { device_id } = data;
+            this.setState({ deviceId: device_id });
+        });
     }
 
     render() {
@@ -117,7 +160,9 @@ class App extends Component {
                                 <button>Connect a New Speaker</button>
                                 <button>View Connected Speakers</button>
                            </div>
-                           <Player token={this.state.token} uri={this.state.currentTrack}/>
+                           <div className={"player"}>
+                               <p>Track URI: {this.state.currentTrack}</p>
+                           </div>
                        </>
                    )}
                </div>
