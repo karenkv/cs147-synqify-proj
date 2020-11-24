@@ -3,10 +3,26 @@ import './App.css';
 import logo from './assets/logo.svg';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            token: null
+        }
+    }
+
+    handleLogin = () => {
+
+    }
+
     render() {
         return (
            <div className={"App"}>
-               <img src={logo} alt={"logo"}/>
+               <div className={"header"}>
+                  <img src={logo} alt={"logo"}/>
+               </div>
+               <div className={"body"}>
+                  <button onClick={this.handleLogin}>Login to Spotify</button>
+               </div>
            </div>
         );
     }
