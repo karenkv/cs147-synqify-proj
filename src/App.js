@@ -13,7 +13,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: cookies.get('token'),
+            token: cookies === {} ? null : cookies.get('token'),
             playing: false,
             results: [],
             currentTrack: null,
