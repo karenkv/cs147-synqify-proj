@@ -18,14 +18,14 @@ https://classic.yarnpkg.com/en/docs/install
 Use the package manager [yarn](https://yarnpkg.com/) to install:
 
 ```bash
-yarn install
+cd frontend && yarn install
 ```
 
 Installs `node_modules` dependencies for development.<br />
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the `frontend` directory, you can run:
 
 ### `yarn start`
 
