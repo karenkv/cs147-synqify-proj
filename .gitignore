@@ -1,9 +1,9 @@
 #dependencies
-/node_modules
+frontend/node_modules
 
 # misc
 .vscode/
 .idea
 .DS_Store
-.env
-src/utils/config.js
+**/.env*
+frontend/src/utils/config.js
