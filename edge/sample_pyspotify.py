@@ -17,6 +17,8 @@ import sys
 import threading
 
 import spotify
+from spotipy.oauth2 import SpotifyClientCredentials
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 if sys.argv[1:]:
     track_uri = sys.argv[1]

@@ -10,6 +10,9 @@ import sys
 import threading
 
 import spotify
+from spotipy.oauth2 import SpotifyClientCredentials
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
 
 # args
 parser = argparse.ArgumentParser(description="Send and receive messages through and MQTT connection.")
