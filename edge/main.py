@@ -1,10 +1,10 @@
+from __future__ import unicode_literals
+
 import argparse
 from awscrt import io, mqtt, auth, http
 from awsiot import mqtt_connection_builder
 import time
 from uuid import uuid4
-
-from __future__ import unicode_literals
 
 import sys
 import threading
