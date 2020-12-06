@@ -10,28 +10,44 @@
     width: 100vw;
     height: 100vh;
     background-color: var(--light-blue);
-    display: flex;
-    flex-direction: row;
     overflow: hidden;
 }
 
 .login {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
     flex-direction: column;
+    padding-top: 250px;
 }
 
-.header {
-    padding-top: 25px;
-    padding-left: 25px;
-    width: 25vw;
-    height: 100vh;
+.login img{
+    width: 20vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
 }
 
-.header > img {
-    width: 200px;
+.login button{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--blue);
+    color: var(--white);
+    font-size: large;
+    border: none;
+    border-radius: 50px;
+    width: 250px;
+    height: 50px;
 }
 
-.login-header {
-    height: 5vh;
+.login button:hover {
+    cursor: pointer;
+    background-color: var(--dark-blue);
+}
+
+.home {
+    display: flex;
+    flex-direction: row;
 }
 
 .body {
@@ -65,15 +81,6 @@
     background-color: var(--dark-blue);
 }
 
-.login-body{
-    width: 100vw;
-}
-
-.login-body button{
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .search {
     display: flex;
     flex-direction: row;
@@ -103,7 +110,19 @@
     padding-left: 30px !important;
 }
 
+.header {
+    padding-top: 25px;
+    padding-left: 25px;
+    width: 25vw;
+    height: 100vh;
+}
+
+.header > img {
+    width: 200px;
+}
+
 .results {
+    width: 20vw;
     height: 75vh;
     overflow-y: scroll;
 }

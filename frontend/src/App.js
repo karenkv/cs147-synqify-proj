@@ -135,12 +135,18 @@ class App extends Component {
 
     render() {
         return (
-           <div className={"App " + (!this.state.token ? 'login':'')}>
-               <div className={"header "+ (!this.state.token ? 'login-header':'')}>
-                  <img src={logo} alt={"logo"}/>
-                   {this.state.token && (
-                       <>
-                           <div className={"search"}>
+            <div className={"App"}>
+                {!this.state.token &&
+                    <div className={"login"}>
+                        <img src={logo} alt={"logo"}/>
+                        <button onClick={this.handleLogin}>Login to Spotify</button>
+                    </div>
+                }
+                {this.state.token &&
+                    <div className={"home"}>
+                        <div className={"header"}>
+                            <img src={logo} alt={"logo"}/>
+                            <div className={"search"}>
                                <form onSubmit={this.handleSearch}>
                                    <img src={icon} alt="magnifying glass"/>
                                    <input type="text" name="search" placeholder="Search"/>
@@ -149,13 +155,8 @@ class App extends Component {
                            <div className={"results"}>
                                {this.state.results}
                            </div>
-                       </>
-                   )}
-               </div>
-               <div className={"body " + (!this.state.token ? 'login-body':'')}>
-                   {!this.state.token && <button onClick={this.handleLogin}>Login to Spotify</button>}
-                   {this.state.token && (
-                       <>
+                        </div>
+                        <div className={"body"}>
                            <div className={"speakers"}>
                                 <button>Connect a New Speaker</button>
                                 <button>View Connected Speakers</button>
@@ -163,10 +164,10 @@ class App extends Component {
                            <div className={"player"}>
                                <p>Track URI: {this.state.currentTrack}</p>
                            </div>
-                       </>
-                   )}
-               </div>
-           </div>
+                        </div>
+                    </div>
+                }
+            </div>
         );
     }
 }
