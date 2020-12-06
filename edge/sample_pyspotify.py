@@ -16,9 +16,8 @@ from __future__ import unicode_literals
 import sys
 import threading
 
+import os
 import spotify
-from spotipy.oauth2 import SpotifyClientCredentials
-spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 if sys.argv[1:]:
     track_uri = sys.argv[1]
@@ -27,6 +26,7 @@ else:
 
 # Assuming a spotify_appkey.key in the current dir
 session = spotify.Session()
+session.login(os.getenv('SPOTIFY_USERNAME'), os.getenv('SPOTIFY_PASSWORD'))
 
 # Process events in the background
 loop = spotify.EventLoop(session)
@@ -56,7 +56,6 @@ session.on(
 session.on(spotify.SessionEvent.END_OF_TRACK, on_end_of_track)
 
 # Assuming a previous login with remember_me=True and a proper logout
-session.relogin()
 
 logged_in.wait()
 
