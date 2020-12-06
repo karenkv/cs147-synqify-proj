@@ -7,3 +7,8 @@ frontend/node_modules
 .DS_Store
 **/.env*
 frontend/src/utils/config.js
+
+# edge
+**/temp
+**/venv
+**/spotify_appkey.key
