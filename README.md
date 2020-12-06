@@ -25,9 +25,9 @@ Installs `node_modules` dependencies for development.<br />
 
 ## Available Scripts
 
-In the `frontend` directory, you can run:
+In the project directory, you can run:
 
-### `yarn start`
+### `cd frontend && yarn start`
 
 This will start the front-end and load it on your preferred browser
 link: [http://localhost:3000](http://localhost:3000)
