@@ -9,6 +9,6 @@ frontend/node_modules
 frontend/src/utils/config.js
 
 # edge
-**/temp
+**/tmp
 **/venv
 **/spotify_appkey.key
