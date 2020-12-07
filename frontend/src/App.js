@@ -1,12 +1,25 @@
 import React, {Component} from 'react';
 import Cookies from "universal-cookie";
-import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes} from "./utils/config";
+import Amplify, {PubSub} from 'aws-amplify';
+import {AWSIoTProvider} from '@aws-amplify/pubsub/lib/Providers';
+import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes, region, identityPoolId, mqttEndpoint} from "./utils/config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
 
 
 const cookies = new Cookies();
+
+Amplify.configure({
+    Auth: {
+        identityPoolId: identityPoolId,
+        region: region
+    }
+});
+Amplify.addPluggable(new AWSIoTProvider({
+    aws_pubsub_region: region,
+    aws_pubsub_endpoint: mqttEndpoint
+}));
 
 
 class App extends Component {
@@ -102,6 +115,9 @@ class App extends Component {
         }).catch(err => {
             console.log(err);
         });
+        PubSub.publish('Play Song', this.state.currentTrack)  // TODO: Update with correct topic
+            .then(response => {console.log(response)})
+            .catch(err => {console.log(err)});
     }
 
     checkForPlayer = () => {
@@ -119,14 +135,22 @@ class App extends Component {
     }
 
     createEventHandlers = () => {
-        this.player.on('initialization_error', e => { console.error(e); });
+        this.player.on('initialization_error', e => {
+            console.error(e);
+        });
         this.player.on('authentication_error', e => {
             console.error(e);
-            this.setState({ loggedIn: false });
+            this.setState({ token: null });
         });
-        this.player.on('account_error', e => { console.error(e); });
-        this.player.on('playback_error', e => { console.error(e); });
-        this.player.on('player_state_changed', state => { console.log(state); });
+        this.player.on('account_error', e => {
+            console.error(e);
+        });
+        this.player.on('playback_error', e => {
+            console.error(e);
+        });
+        this.player.on('player_state_changed', state => {
+            console.log(state);
+        });
         this.player.on('ready', data => {
             let { device_id } = data;
             this.setState({ deviceId: device_id });
