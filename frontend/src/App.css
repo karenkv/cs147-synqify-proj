@@ -9,7 +9,7 @@
 .App {
     width: 100vw;
     height: 100vh;
-    background-color: var(--light-blue);
+    background-color: #90ADC6;
     overflow: hidden;
 }
 

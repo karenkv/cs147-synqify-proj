@@ -1,9 +1,21 @@
 import React, {Component} from 'react';
+import Amplify, {Auth, PubSub} from 'aws-amplify';
+import {AWSIoTProvider} from "@aws-amplify/pubsub/lib/Providers";
+import {awsconfig} from './aws-exports';
 import {cookies} from "./utils/cookies";
-import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes} from "./utils/config";
+import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes, region, mqttEndpoint} from "./utils/config";
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
+
+
+Amplify.configure(awsconfig);
+Amplify.addPluggable(new AWSIoTProvider({
+    aws_pubsub_region: region,
+    aws_pubsub_endpoint: mqttEndpoint,
+   }));
+Auth.currentCredentials().then(creds => console.log(creds));
+
 
 class App extends Component {
     constructor(props) {
@@ -13,7 +25,9 @@ class App extends Component {
             playing: false,
             results: [],
             currentTrack: null,
-            deviceId: null
+            deviceId: null,
+            player: null,
+            speakers: []
         }
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.handlePlaySong = this.handlePlaySong.bind(this);
@@ -35,6 +49,21 @@ class App extends Component {
             cookies.set('token', result['access_token'], {path: '/', expires: d});
             window.open(redirectUri, "_self");
         }
+        PubSub.subscribe('speaker-connected').subscribe({
+            next: data => {
+                try {
+                    if(!this.state.speakers.includes(data.value.speaker)) {
+                        this.setState({speakers: [...this.state.speakers, data.value.speaker]})
+                        console.log(this.state.speakers);
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+            error: error => console.error(error),
+            close: () => console.log('Done'),
+        });
     }
 
     handleLogin = () => {
@@ -166,7 +195,6 @@ class App extends Component {
                                 <button>View Connected Speakers</button>
                            </div>
                            <div className={"player"}>
-                               <p>Track URI: {this.state.currentTrack}</p>
                            </div>
                         </div>
                     </div>
