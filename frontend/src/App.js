@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Modal from 'react-modal';
 import Amplify, {Auth, PubSub} from 'aws-amplify';
 import {AWSIoTProvider} from "@aws-amplify/pubsub/lib/Providers";
 import {awsconfig} from './aws-exports';
@@ -27,7 +28,8 @@ class App extends Component {
             currentTrack: null,
             deviceId: null,
             player: null,
-            speakers: []
+            speakers: [],
+            viewSpeakers: false
         }
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.handlePlaySong = this.handlePlaySong.bind(this);
@@ -109,6 +111,14 @@ class App extends Component {
             alert("Access token expired! Please login again.");
             this.handleLogin();
         })
+    }
+
+    handleOpenViewSpeakers = () => {
+        this.setState({viewSpeakers: true});
+    }
+
+    handleCloseViewSpeakers = () =>{
+        this.setState({viewSpeakers: false});
     }
 
     handlePlaySong = (trackUri) => {
@@ -194,11 +204,16 @@ class App extends Component {
                         </div>
                         <div className={"body"}>
                            <div className={"speakers"}>
-                                <button>Connect a New Speaker</button>
-                                <button>View Connected Speakers</button>
+                                <button onClick={this.handleOpenViewSpeakers}>View Connected Speakers</button>
                            </div>
                            <div className={"player"}>
                            </div>
+                            <Modal
+                                isOpen={this.state.viewSpeakers}
+                                onRequestClose={this.handleCloseViewSpeakers}>
+                                <button onClick={this.handleCloseViewSpeakers}>X</button>
+                                {this.state.speakers}
+                            </Modal>
                         </div>
                     </div>
                 }
