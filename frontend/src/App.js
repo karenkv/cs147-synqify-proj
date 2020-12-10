@@ -113,21 +113,23 @@ class App extends Component {
 
     handlePlaySong = (trackUri) => {
         this.setState({currentTrack: trackUri});
-        PubSub.publish('new-song-played', {'spotify-uri': trackUri});
-        fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.state.token}`,
-            },
-            body: JSON.stringify({
-                "uris": [trackUri]
-            })
-        }).then(response => response.json()).then(data => {
-            console.log(data);
-        }).catch(err => {
-            console.log(err);
-        });
+        PubSub.publish('new-song-played', {'spotify-uri': trackUri})
+            .then(response => {
+                fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.state.token}`,
+                    },
+                    body: JSON.stringify({
+                        "uris": [trackUri]
+                    })
+                }).then(response => response.json()).then(data => {
+                    console.log(data);
+                }).catch(err => {
+                    console.log(err);
+                });
+            });
     }
 
     checkForPlayer = () => {
