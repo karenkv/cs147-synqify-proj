@@ -113,6 +113,7 @@ class App extends Component {
 
     handlePlaySong = (trackUri) => {
         this.setState({currentTrack: trackUri});
+        PubSub.publish('new-song-played', {'spotify-uri': trackUri});
         fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
             method: "PUT",
             headers: {
