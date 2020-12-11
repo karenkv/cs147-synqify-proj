@@ -218,6 +218,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-align: center;
+    color: var(--white);
 }
 
 .player button {
@@ -225,14 +227,15 @@
     text-align: center;
 }
 
+.player p {
+    font-size: large;
+    margin: 0 0 10px;
+}
+
 .player img {
     width: 500px;
     padding-top: 25px;
     padding-bottom: 10px;
-}
-
-.player h2 {
-    color: var(--white);
 }
 
 .progress {

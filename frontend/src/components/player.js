@@ -96,7 +96,7 @@ class Player extends Component {
         return (
             <div className={'player'}>
                 <img src={this.state.img} alt={'Album Cover'}/>
-                <h2>{this.state.name} by {this.state.artists}</h2>
+                <p><b>{this.state.name}</b><br/><i>by {this.state.artists}</i></p>
                 <div className={"progress"}>
                     <div className={"progress-bar"} style={{transform: `scaleX(${this.state.progress})`}}/>
                 </div>
