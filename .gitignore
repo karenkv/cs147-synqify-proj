@@ -1,12 +1,13 @@
-#dependencies
-/frontend/node_modules
-
 # misc
 .vscode/
 .idea
 .DS_Store
 **/.env*
+
+# frontend
+/frontend/node_modules
 /frontend/src/utils/config.js
+/frontend/debug.log
 
 # edge
 **/tmp

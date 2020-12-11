@@ -209,10 +209,17 @@ class App extends Component {
                            <div className={"player"}>
                            </div>
                             <Modal
+                                className={'speaker'}
+                                overlayClassName={'speaker-overlay'}
                                 isOpen={this.state.viewSpeakers}
                                 onRequestClose={this.handleCloseViewSpeakers}>
-                                <button onClick={this.handleCloseViewSpeakers}>X</button>
-                                {this.state.speakers}
+                                <button className={'speaker-button'} onClick={this.handleCloseViewSpeakers}>X</button>
+                                <div className={'speaker-text'}>
+                                    <h1>Connected Speakers</h1>
+                                    {this.state.speakers.map(speaker => {
+                                        return(<p>{speaker}</p>)
+                                    })}
+                                </div>
                             </Modal>
                         </div>
                     </div>

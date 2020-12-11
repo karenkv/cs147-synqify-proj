@@ -165,3 +165,41 @@
 *:focus {
     outline: 0 !important;
 }
+
+.speaker {
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    right: 35%;
+    bottom: 10%;
+    background-color: var(--blue);
+    opacity: 85%;
+}
+.speaker-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.speaker-button {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background-color: var(--blue);
+    border: none;
+    font-size: xx-large;
+    color: var(--white);
+}
+
+.speaker-text {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    color: var(--white);
+}
+
+.speaker-text p {
+    font-size: large;
+}
