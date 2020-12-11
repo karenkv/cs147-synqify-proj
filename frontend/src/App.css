@@ -64,10 +64,10 @@
     justify-content: center;
     width: 75vw;
     height: 75vh;
-    padding-top: 25px;
+    padding-top: 100px;
 }
 
-.speakers {
+.header-buttons {
     position: absolute;
     right: 25px;
     top: 25px;
@@ -92,6 +92,7 @@
 .search {
     display: flex;
     flex-direction: row;
+    padding-bottom: 10px;
 }
 
 .search img {
@@ -130,8 +131,8 @@
 }
 
 .results {
-    width: 20vw;
-    height: 75vh;
+    width: 25vw;
+    height: 80vh;
     overflow-y: scroll;
 }
 
@@ -216,8 +217,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+
+.player button {
+    width: 50px;
+    text-align: center;
 }
 
 .player img {
     width: 500px;
+    padding-top: 25px;
+    padding-bottom: 10px;
+}
+
+.progress {
+    width: 500px;
+    height: 25px;
+    margin-bottom: 10px;
+    background-color: var(--dark-blue);
+}
+
+.progress-bar {
+    height: 25px;
+    background-color: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left;
 }

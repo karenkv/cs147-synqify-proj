@@ -11,6 +11,9 @@ class Player extends Component {
             playing: false
         }
         this.getPlayerInfo = this.getPlayerInfo.bind(this);
+        this.progressBar = {
+            width: (this.state.progress / this.state.duration) * 100 + '%'
+        }
     }
 
     componentDidMount() {
@@ -32,7 +35,6 @@ class Player extends Component {
                     this.setState({playing: true})
                     this.handlePlayerPlaying();
                 } else {
-                    this.setState({playing: false})
                     this.handlePlayerNotPlaying();
                 }
 
@@ -57,6 +59,11 @@ class Player extends Component {
             if (data.item.album !== null) {
                 this.setState({img: data.item.album.images[0].url});
             }
+            this.setState({
+                progress: (data.progress_ms / data.item.duration_ms),
+                name: data.item.name,
+                artists: data.item.artists.map(artist => {return artist.name}).join(", ")
+            });
         }).catch(err => {
             console.log(err);
         });
@@ -74,6 +81,11 @@ class Player extends Component {
             if (data.items[0].track.album !== null) {
                 this.setState({img: data.items[0].track.album.images[0].url});
             }
+            this.setState({
+                progress: 0,
+                name: data.items[0].track.name,
+                artists: data.items[0].track.artists.map(artist => {return artist.name}).join(", ")
+            })
         }).catch(err => {
             console.log(err);
         });
@@ -83,6 +95,10 @@ class Player extends Component {
         return (
             <div className={'player'}>
                 <img src={this.state.img} alt={'Album Cover'}/>
+                <p>{this.state.name} by {this.state.artists}</p>
+                <div className={"progress"}>
+                    <div className={"progress-bar"} style={{transform: `scaleX(${this.state.progress})`}}/>
+                </div>
                 <button>{this.state.playing? '❚❚' : '►'}</button>
             </div>
         )

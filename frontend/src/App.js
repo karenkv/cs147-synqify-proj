@@ -206,13 +206,11 @@ class App extends Component {
                            </div>
                         </div>
                         <div className={"body"}>
-                           <div className={"speakers"}>
+                           <div className={"header-buttons"}>
                                <button onClick={this.handleOpenViewSpeakers}>View Connected Speakers</button>
                                <button onClick={this.handleLogout}>Logout of Spotify</button>
                            </div>
-                           <div className={"player"}>
-                               {this.state.deviceId && <Player token={this.state.token} deviceId={this.state.deviceId}/>}
-                           </div>
+                           {this.state.deviceId && <Player token={this.state.token} deviceId={this.state.deviceId}/>}
                             <Modal
                                 className={'speaker'}
                                 overlayClassName={'speaker-overlay'}
