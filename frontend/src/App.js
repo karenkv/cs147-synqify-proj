@@ -74,6 +74,11 @@ class App extends Component {
         window.open(toString, "_self");
     }
 
+    handleLogout = () => {
+        cookies.remove('token');
+        window.location.reload();
+    }
+
     handleSearch = (event) => {
         event.preventDefault();
         fetch(`${apiEndpoint}/search?q=${encodeURIComponent(event.target.search.value)}&type=track`, {
@@ -204,7 +209,8 @@ class App extends Component {
                         </div>
                         <div className={"body"}>
                            <div className={"speakers"}>
-                                <button onClick={this.handleOpenViewSpeakers}>View Connected Speakers</button>
+                               <button onClick={this.handleOpenViewSpeakers}>View Connected Speakers</button>
+                               <button onClick={this.handleLogout}>Logout of Spotify</button>
                            </div>
                            <div className={"player"}>
                            </div>
