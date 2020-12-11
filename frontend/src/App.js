@@ -230,6 +230,7 @@ class App extends Component {
                         </div>
                     </div>
                 }
+                <div className={'footer'}>Made with ♡ by Harrison Huang, Kayla Tran, and Karen Vu for CS 147 F20</div>
             </div>
         );
     }

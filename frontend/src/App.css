@@ -13,6 +13,14 @@
     overflow: hidden;
 }
 
+.footer {
+    color: var(--yellow);
+    position:absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .login {
     width: 100vw;
     display: flex;
@@ -203,3 +211,4 @@
 .speaker-text p {
     font-size: large;
 }
+
