@@ -35,6 +35,7 @@ class Player extends Component {
                     this.setState({playing: true})
                     this.handlePlayerPlaying();
                 } else {
+                    this.setState({playing: false})
                     this.handlePlayerNotPlaying();
                 }
 
@@ -95,11 +96,11 @@ class Player extends Component {
         return (
             <div className={'player'}>
                 <img src={this.state.img} alt={'Album Cover'}/>
-                <p>{this.state.name} by {this.state.artists}</p>
+                <h2>{this.state.name} by {this.state.artists}</h2>
                 <div className={"progress"}>
                     <div className={"progress-bar"} style={{transform: `scaleX(${this.state.progress})`}}/>
                 </div>
-                <button>{this.state.playing? '❚❚' : '►'}</button>
+                <button>{this.state.playing ? '❚❚' : '►'}</button>
             </div>
         )
     }
