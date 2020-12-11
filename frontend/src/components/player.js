@@ -83,7 +83,7 @@ class Player extends Component {
         return (
             <div className={'player'}>
                 <img src={this.state.img} alt={'Album Cover'}/>
-                <button>{this.state.playing? '►' : '❚❚'}</button>
+                <button>{this.state.playing? '❚❚' : '►'}</button>
             </div>
         )
     }
