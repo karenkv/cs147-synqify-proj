@@ -57,7 +57,6 @@ class App extends Component {
                 try {
                     if(!this.state.speakers.includes(data.value.speaker)) {
                         this.setState({speakers: [...this.state.speakers, data.value.speaker]})
-                        console.log(this.state.speakers);
                     }
                 }
                 catch (error) {
@@ -65,7 +64,6 @@ class App extends Component {
                 }
             },
             error: error => console.error(error),
-            close: () => console.log('Done'),
         });
     }
 
@@ -91,7 +89,6 @@ class App extends Component {
                 'Authorization': `Bearer ${this.state.token}`
             }
         }).then(response => response.json()).then(data => {
-            console.log(data);
             if(data.tracks.items.length > 0) {
                 this.setState({
                     results: data.tracks.items.map(track => {
