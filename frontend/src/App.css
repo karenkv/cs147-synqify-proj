@@ -220,6 +220,7 @@
     flex-direction: column;
     text-align: center;
     color: var(--white);
+    margin-right: 35%;
 }
 
 .player button {
