@@ -8,6 +8,7 @@ import {authEndpoint, apiEndpoint, clientId, redirectUri, scopes, region, mqttEn
 import logo from './assets/logo.svg';
 import icon from './assets/search.svg';
 import './App.css';
+import Player from "./components/player";
 
 
 Amplify.configure(awsconfig);
@@ -213,6 +214,7 @@ class App extends Component {
                                <button onClick={this.handleLogout}>Logout of Spotify</button>
                            </div>
                            <div className={"player"}>
+                               {this.state.deviceId && <Player token={this.state.token} deviceId={this.state.deviceId}/>}
                            </div>
                             <Modal
                                 className={'speaker'}

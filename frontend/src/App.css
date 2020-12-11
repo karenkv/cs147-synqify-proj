@@ -212,3 +212,12 @@
     font-size: large;
 }
 
+.player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player img {
+    width: 500px;
+}
