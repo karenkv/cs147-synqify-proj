@@ -34,15 +34,16 @@ class Player extends Component {
             const string = await response.text();
             const data = string === "" ? {} : JSON.parse(string);
             if (data !== {}) {
-                if (data.is_playing) {
-                    this.setState({playing: true})
-                } else {
-                    this.setState({playing: false})
-                }
                 try {
                     this.handlePlayerPlaying();
+                    if (data.is_playing) {
+                        this.setState({playing: true})
+                    } else {
+                        this.setState({playing: false})
+                    }
                 } catch {
                     this.handlePlayerNotPlaying();
+                    this.setState({playing: false})
                 }
             }
         }).catch(err => {
@@ -101,7 +102,7 @@ class Player extends Component {
     pauseSong = () => {
         PubSub.publish('pause-song', {'timeStamp': Date.now() + 2000})
             .then(async response => {
-                await new Promise(r => setTimeout(r, 2000));
+                await new Promise(r => setTimeout(r, 1000));
                 fetch(`${apiEndpoint}/me/player/pause`, {
                     method: "PUT",
                     headers: {
@@ -122,7 +123,7 @@ class Player extends Component {
         PubSub.publish('play-song', {
             'spotifyUri': this.state.trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': this.state.currentTime
         }).then(async response => {
-            await new Promise(r => setTimeout(r, 2000));
+            await new Promise(r => setTimeout(r, 1000));
             fetch(`${apiEndpoint}/me/player/play`, {
                 method: "PUT",
                 headers: {
