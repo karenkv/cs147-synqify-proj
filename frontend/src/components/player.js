@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {apiEndpoint} from "../utils/config";
+import {PubSub} from "aws-amplify";
 
 class Player extends Component {
     constructor(props) {
@@ -8,7 +9,9 @@ class Player extends Component {
             token: props.token,
             deviceId: props.deviceId,
             img: null,
-            playing: false
+            playing: false,
+            currentTime: 0,
+            trackUri: null
         }
         this.getPlayerInfo = this.getPlayerInfo.bind(this);
         this.progressBar = {
@@ -33,9 +36,12 @@ class Player extends Component {
             if (data !== {}) {
                 if (data.is_playing) {
                     this.setState({playing: true})
-                    this.handlePlayerPlaying();
                 } else {
                     this.setState({playing: false})
+                }
+                try {
+                    this.handlePlayerPlaying();
+                } catch {
                     this.handlePlayerNotPlaying();
                 }
             }
@@ -56,10 +62,11 @@ class Player extends Component {
                 'Authorization': `Bearer ${this.state.token}`
             }
         }).then(response => response.json()).then(data => {
-            if (data.item.album !== null) {
+            if (data.item.album !== undefined) {
                 this.setState({img: data.item.album.images[0].url});
             }
             this.setState({
+                currentTime: data.progress_ms,
                 progress: (data.progress_ms / data.item.duration_ms),
                 name: data.item.name,
                 artists: data.item.artists.map(artist => {return artist.name}).join(", ")
@@ -77,48 +84,58 @@ class Player extends Component {
                 'Authorization': `Bearer ${this.state.token}`,
             }
         }).then(response => response.json()).then(data => {
-            if (data.items[0].track.album !== null) {
-                this.setState({img: data.items[0].track.album.images[0].url});
+            if (data.items !== undefined) {
+                this.setState({
+                    img: data.items[0].track.album.images[0].url,
+                    progress: 0,
+                    name: data.items[0].track.name,
+                    artists: data.items[0].track.artists.map(artist => {return artist.name}).join(", "),
+                    trackUri: data.items[0].track.uri
+                });
             }
-            this.setState({
-                progress: 0,
-                name: data.items[0].track.name,
-                artists: data.items[0].track.artists.map(artist => {return artist.name}).join(", ")
-            })
         }).catch(err => {
             console.log(err);
         });
     }
 
     pauseSong = () => {
-        fetch(`${apiEndpoint}/me/player/pause`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.state.token}`,
-            }
-        }).then(response => {
-            if(response.ok) {
-                this.setState({playing: false})
-            }
-        }).catch(err => {
-            console.log(err);
-        });
+        PubSub.publish('pause-song', {'timeStamp': Date.now() + 2000})
+            .then(async response => {
+                await new Promise(r => setTimeout(r, 2000));
+                fetch(`${apiEndpoint}/me/player/pause`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.state.token}`,
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        this.setState({playing: false})
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            });
     }
 
     playSong = () => {
-        fetch(`${apiEndpoint}/me/player/play`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.state.token}`,
-            }
-        }).then(response => {
-            if(response.ok) {
-                this.setState({playing: false})
-            }
-        }).catch(err => {
-            console.log(err);
+        PubSub.publish('play-song', {
+            'spotifyUri': this.state.trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': this.state.currentTime
+        }).then(async response => {
+            await new Promise(r => setTimeout(r, 2000));
+            fetch(`${apiEndpoint}/me/player/play`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.token}`,
+                }
+            }).then(response => {
+                if (response.ok) {
+                    this.setState({playing: false})
+                }
+            }).catch(err => {
+                console.log(err);
+            });
         });
     }
 

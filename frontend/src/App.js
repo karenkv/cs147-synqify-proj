@@ -52,11 +52,11 @@ class App extends Component {
             cookies.set('token', result['access_token'], {path: '/', expires: d});
             window.open(redirectUri, "_self");
         }
-        PubSub.subscribe('speaker-connected').subscribe({
+        PubSub.subscribe('device-connected').subscribe({
             next: data => {
                 try {
                     if(!this.state.speakers.includes(data.value.speaker)) {
-                        this.setState({speakers: [...this.state.speakers, data.value.speaker]})
+                        this.setState({speakers: [...this.state.speakers, data.value.deviceId]})
                     }
                 }
                 catch (error) {
@@ -126,8 +126,9 @@ class App extends Component {
 
     handlePlaySong = (trackUri) => {
         this.setState({currentTrack: trackUri});
-        PubSub.publish('new-song-played', {'spotify-uri': trackUri})
-            .then(response => {
+        PubSub.publish('play-song', {'spotifyUri': trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': 0})
+            .then(async response => {
+                await new Promise(r => setTimeout(r, 2000));
                 fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
                     method: "PUT",
                     headers: {
@@ -209,7 +210,11 @@ class App extends Component {
                                <button onClick={this.handleOpenViewSpeakers}>View Connected Speakers</button>
                                <button onClick={this.handleLogout}>Logout of Spotify</button>
                            </div>
-                           {this.state.deviceId && <Player token={this.state.token} deviceId={this.state.deviceId}/>}
+                           {this.state.deviceId &&
+                           <Player
+                               token={this.state.token}
+                               deviceId={this.state.deviceId}
+                           />}
                             <Modal
                                 className={'speaker'}
                                 overlayClassName={'speaker-overlay'}
