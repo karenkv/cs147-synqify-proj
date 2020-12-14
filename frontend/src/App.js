@@ -55,8 +55,8 @@ class App extends Component {
         PubSub.subscribe('device-connected').subscribe({
             next: data => {
                 try {
-                    if(!this.state.speakers.includes(data.value.speaker)) {
-                        this.setState({speakers: [...this.state.speakers, data.value.deviceId]})
+                    if(!this.state.speakers.includes([data.value.deviceId, data.value.volume])) {
+                        this.setState({speakers: [...this.state.speakers, [data.value.deviceId, data.value.volume]]})
                     }
                 }
                 catch (error) {
@@ -224,7 +224,7 @@ class App extends Component {
                                 <div className={'speaker-text'}>
                                     <h1>Connected Speakers</h1>
                                     {this.state.speakers.map(speaker => {
-                                        return(<p>{speaker}</p>)
+                                        return(<p>{speaker[0]} | Volume: {speaker[1]}%</p>)
                                     })}
                                 </div>
                             </Modal>

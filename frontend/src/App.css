@@ -181,8 +181,8 @@
     left: 35%;
     right: 35%;
     bottom: 10%;
-    background-color: var(--blue);
-    opacity: 85%;
+    background-color: #e5eaec;
+    border-radius: 5%;
 }
 .speaker-overlay {
     position: fixed;
@@ -196,17 +196,16 @@
     position: absolute;
     top: 25px;
     right: 25px;
-    background-color: var(--blue);
+    background-color: #e5eaec;
     border: none;
     font-size: xx-large;
-    color: var(--white);
+    color: var(--dark-blue);
 }
 
 .speaker-text {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    color: var(--white);
+    text-align: center;
+    padding-top: 50px;
+    color: var(--dark-blue);
 }
 
 .speaker-text p {
