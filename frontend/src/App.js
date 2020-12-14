@@ -29,6 +29,7 @@ class App extends Component {
             currentTrack: null,
             deviceId: null,
             player: null,
+            speakersIds: [],
             speakers: [],
             viewSpeakers: false
         }
@@ -55,8 +56,15 @@ class App extends Component {
         PubSub.subscribe('device-connected').subscribe({
             next: data => {
                 try {
-                    if(!this.state.speakers.includes([data.value.deviceId, data.value.volume])) {
-                        this.setState({speakers: [...this.state.speakers, [data.value.deviceId, data.value.volume]]})
+                    let obj = {deviceId: data.value.deviceId, volume: data.value.volume};
+                    if(!this.state.speakersIds.includes(data.value.deviceId)) {
+                        this.setState({speakersIds: [...this.state.speakers, data.value.deviceId]});
+                        this.setState({speakers: [...this.state.speakers, obj]});
+                    } else {
+                        let temp = this.state.speakers;
+                        let idx = this.state.speakersIds.indexOf(data.value.deviceId);
+                        temp[idx] = obj;
+                        this.setState({speakers: temp});
                     }
                 }
                 catch (error) {
@@ -224,7 +232,7 @@ class App extends Component {
                                 <div className={'speaker-text'}>
                                     <h1>Connected Speakers</h1>
                                     {this.state.speakers.map(speaker => {
-                                        return(<p>{speaker[0]} | Volume: {speaker[1]}%</p>)
+                                        return(<p>{speaker.deviceId} | Volume: {speaker.volume}%</p>)
                                     })}
                                 </div>
                             </Modal>

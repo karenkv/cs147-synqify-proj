@@ -1,6 +1,6 @@
 {
   "auth": {
-    "frontendcd8deac7": {
+    "frontend62c341cd": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
