@@ -8,13 +8,29 @@ from uuid import uuid4
 
 import sys
 import threading
+import datetime
+import time
+
 
 import os
 import spotify
+import json
 
+import alsaaudio
+
+mixer = alsaaudio.Mixer("Headphone")
+print(mixer.getvolume())
+
+# hardcoded values
+topic_heartbeat = "device-connected"
+topic_play = "play-song"
+topic_pause = "pause-song"
+
+heartbeat_rate = 2 
 
 # args
 parser = argparse.ArgumentParser(description="Send and receive messages through and MQTT connection.")
+parser.add_argument('--id', required=True)
 parser.add_argument('--endpoint', required=True, help="Your AWS IoT custom endpoint, not including a port. " +
                                                       "Ex: \"abcd123456wxyz-ats.iot.us-east-1.amazonaws.com\"")
 parser.add_argument('--cert', help="File path to your client certificate, in PEM format.")
@@ -118,6 +134,56 @@ def on_message_received(topic, payload, **kwargs):
     if received_count == args.count:
         received_all_event.set()
 
+
+    if topic == topic_play:
+        print("topic_play")
+        track_uri = 'spotify:track:6xZtSE6xaBxmRozKA0F6TA'
+
+        # Play a track
+        track = session.get_track(track_uri).load()
+        session.player.load(track)
+        session.player.play()
+
+    elif topic == topic_pause:
+        print("topic_pause")
+
+        session.player.pause()
+        session.player.unload()
+    else:
+        print("{} OP not supported".format(topic))
+
+
+def subscribeTo(topic):
+    # Subscribe
+    print("Subscribing to topic '{}'...".format(args.topic))
+    subscribe_future, packet_id = mqtt_connection.subscribe(
+        topic=topic,
+        qos=mqtt.QoS.AT_LEAST_ONCE,
+        callback=on_message_received)
+
+    subscribe_result = subscribe_future.result()
+    print("Subscribed with {}".format(str(subscribe_result['qos'])))
+
+# expects json string as message
+def publishTo(topic, message):
+    print("Publishing message to topic '{}': {}".format(args.topic, message))
+    mqtt_connection.publish(
+        topic=topic,
+        payload=message,
+        qos=mqtt.QoS.AT_LEAST_ONCE)
+    time.sleep(1)
+
+def heartbeatThread():
+    next_call = time.time()
+    while True:
+        #print(datetime.datetime.now())
+        data = {
+            "deviceId": args.id,
+            "volume": mixer.getvolume()[0]
+        }
+        publishTo(topic_heartbeat, json.dumps(data))  
+        time.sleep(heartbeat_rate)
+
 if __name__ == '__main__':
     # Spin up resources
     event_loop_group = io.EventLoopGroup(1)
@@ -165,43 +231,19 @@ if __name__ == '__main__':
     connect_future.result()
     print("Connected!")
 
-    # Subscribe
-    print("Subscribing to topic '{}'...".format(args.topic))
-    subscribe_future, packet_id = mqtt_connection.subscribe(
-        topic=args.topic,
-        qos=mqtt.QoS.AT_LEAST_ONCE,
-        callback=on_message_received)
+    subscribeTo(args.topic)
+    subscribeTo(topic_play)
+    subscribeTo(topic_pause)
 
-    subscribe_result = subscribe_future.result()
-    print("Subscribed with {}".format(str(subscribe_result['qos'])))
+    # heartbeat timer callback
+    timerThread = threading.Thread(target=heartbeatThread)
+    timerThread.daemon = True
+    timerThread.start()
 
-    # Publish message to server desired number of times.
-    # This step is skipped if message is blank.
-    # This step loops forever if count was set to 0.
-    if args.message:
-        if args.count == 0:
-            print ("Sending messages until program killed")
-        else:
-            print ("Sending {} message(s)".format(args.count))
-
-        publish_count = 1
-        while (publish_count <= args.count) or (args.count == 0):
-            message = "{} [{}]".format(args.message, publish_count)
-            print("Publishing message to topic '{}': {}".format(args.topic, message))
-            mqtt_connection.publish(
-                topic=args.topic,
-                payload=message,
-                qos=mqtt.QoS.AT_LEAST_ONCE)
-            time.sleep(1)
-            publish_count += 1
-
-    # Wait for all messages to be received.
-    # This waits forever if count was set to 0.
-    if args.count != 0 and not received_all_event.is_set():
-        print("Waiting for all messages to be received...")
-
-    received_all_event.wait()
-    print("{} message(s) received.".format(received_count))
+    publishTo(args.topic, "hola")
+   
+    while True:
+        pass
 
     # Disconnect
     print("Disconnecting...")
@@ -211,16 +253,10 @@ if __name__ == '__main__':
 
 
 
-    track_uri = 'spotify:track:6xZtSE6xaBxmRozKA0F6TA'
-
-    # Play a track
-    track = session.get_track(track_uri).load()
-    session.player.load(track)
-    session.player.play()
 
     # Wait for playback to complete or Ctrl+C
     try:
-        while not end_of_track.wait(0.1):
+ #       while not end_of_track.wait(0.1):
             pass
     except KeyboardInterrupt:
         pass
