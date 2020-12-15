@@ -20,7 +20,7 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        this.playerInterval = setInterval(() => this.getPlayerInfo(), 1000);
+        this.playerInterval = setInterval(() => this.getPlayerInfo(), 500);
     }
 
     getPlayerInfo = () => {
@@ -70,7 +70,8 @@ class Player extends Component {
                 currentTime: data.progress_ms,
                 progress: (data.progress_ms / data.item.duration_ms),
                 name: data.item.name,
-                artists: data.item.artists.map(artist => {return artist.name}).join(", ")
+                artists: data.item.artists.map(artist => {return artist.name}).join(", "),
+                trackUri: data.item.uri
             });
         }).catch(err => {
             console.log(err);

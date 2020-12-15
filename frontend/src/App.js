@@ -136,7 +136,6 @@ class App extends Component {
         this.setState({currentTrack: trackUri});
         PubSub.publish('play-song', {'spotifyUri': trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': 0})
             .then(async response => {
-                await new Promise(r => setTimeout(r, 750));
                 fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
                     method: "PUT",
                     headers: {
