@@ -33,6 +33,26 @@ class App extends Component {
             speakers: [],
             viewSpeakers: false
         }
+        PubSub.subscribe('device-connected').subscribe({
+            next: data => {
+                try {
+                    let obj = {deviceId: data.value.deviceId, volume: data.value.volume};
+                    if(!this.state.speakersIds.includes(data.value.deviceId)) {
+                        this.setState({speakersIds: [...this.state.speakersIds, data.value.deviceId]});
+                        this.setState({speakers: [...this.state.speakers, obj]});
+                    } else {
+                        let temp = this.state.speakers;
+                        let idx = this.state.speakersIds.indexOf(data.value.deviceId);
+                        temp[idx] = obj;
+                        this.setState({speakers: temp});
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+            error: error => console.error(error),
+        });
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.handlePlaySong = this.handlePlaySong.bind(this);
     }
@@ -53,26 +73,6 @@ class App extends Component {
             cookies.set('token', result['access_token'], {path: '/', expires: d});
             window.open(redirectUri, "_self");
         }
-        PubSub.subscribe('device-connected').subscribe({
-            next: data => {
-                try {
-                    let obj = {deviceId: data.value.deviceId, volume: data.value.volume};
-                    if(!this.state.speakersIds.includes(data.value.deviceId)) {
-                        this.setState({speakersIds: [...this.state.speakers, data.value.deviceId]});
-                        this.setState({speakers: [...this.state.speakers, obj]});
-                    } else {
-                        let temp = this.state.speakers;
-                        let idx = this.state.speakersIds.indexOf(data.value.deviceId);
-                        temp[idx] = obj;
-                        this.setState({speakers: temp});
-                    }
-                }
-                catch (error) {
-                    console.log(error);
-                }
-            },
-            error: error => console.error(error),
-        });
     }
 
     handleLogin = () => {
@@ -136,6 +136,7 @@ class App extends Component {
         this.setState({currentTrack: trackUri});
         PubSub.publish('play-song', {'spotifyUri': trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': 0})
             .then(async response => {
+                await new Promise(r => setTimeout(r, 1000));
                 fetch(`${apiEndpoint}/me/player/play?device_id=${this.state.deviceId}`, {
                     method: "PUT",
                     headers: {

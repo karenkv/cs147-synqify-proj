@@ -103,7 +103,7 @@ class Player extends Component {
     pauseSong = () => {
         PubSub.publish('pause-song', {'timeStamp': Date.now() + 2000})
             .then(async response => {
-                await new Promise(r => setTimeout(r, 1000));
+                await new Promise(r => setTimeout(r, 500));
                 fetch(`${apiEndpoint}/me/player/pause`, {
                     method: "PUT",
                     headers: {
@@ -124,7 +124,7 @@ class Player extends Component {
         PubSub.publish('play-song', {
             'spotifyUri': this.state.trackUri, 'timeStamp': Date.now() + 2000, 'songProgress': this.state.currentTime
         }).then(async response => {
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 1250));
             fetch(`${apiEndpoint}/me/player/play`, {
                 method: "PUT",
                 headers: {
