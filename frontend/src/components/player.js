@@ -63,16 +63,16 @@ class Player extends Component {
                 'Authorization': `Bearer ${this.state.token}`
             }
         }).then(response => response.json()).then(data => {
-            if (data.item.album !== undefined) {
-                this.setState({img: data.item.album.images[0].url});
+            if (data.item !== undefined) {
+                this.setState({
+                    img: data.item.album.images[0].url,
+                    currentTime: data.progress_ms,
+                    progress: (data.progress_ms / data.item.duration_ms),
+                    name: data.item.name,
+                    artists: data.item.artists.map(artist => {return artist.name}).join(", "),
+                    trackUri: data.item.uri
+                });
             }
-            this.setState({
-                currentTime: data.progress_ms,
-                progress: (data.progress_ms / data.item.duration_ms),
-                name: data.item.name,
-                artists: data.item.artists.map(artist => {return artist.name}).join(", "),
-                trackUri: data.item.uri
-            });
         }).catch(err => {
             console.log(err);
         });
