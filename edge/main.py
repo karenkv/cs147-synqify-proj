@@ -136,12 +136,23 @@ def on_message_received(topic, payload, **kwargs):
 
 
     if topic == topic_play:
-        print("topic_play")
-        track_uri = 'spotify:track:6xZtSE6xaBxmRozKA0F6TA'
+        #print("topic_play")
+        d = json.loads(payload)
+        trackUri = d['spotifyUri']
+        songProgress = d['songProgress']
+        timestamp = d['timeStamp']
 
+
+        print("{}|{}|{}".format(trackUri, songProgress, timestamp))
+        
+        track_uri = trackUri
+        
         # Play a track
         track = session.get_track(track_uri).load()
         session.player.load(track)
+        session.player.seek(songProgress)
+        print(timestamp/1000 - datetime.datetime.now().timestamp())
+        time.sleep(timestamp/1000 - datetime.datetime.now().timestamp())
         session.player.play()
 
     elif topic == topic_pause:
